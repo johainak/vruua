@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Vulnerabilities recognition using
+user-agent{% endblock %}</title>
+
+  <link rel="stylesheet" type="text/css" href="{%static 'css/bootstrap.min.css' %}"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{%static 'js/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+  <div class="container">
+    <header class="jumbotron">
+      <h1>VRU<sup>2</sup>A</h1>
+      <p>Vulnerabilities recognition using
+user-agent</p>
+      {% if user.is_authenticated %}
+        Hi {{ user.first_name }}!
+      <a href="{% url 'logout' %}">logout</a>
+    {% else %}
+      <a href="{% url 'login' %}">login</a>
+    {% endif %}
+    </header>
+    <hr>
+    <main>
+
+    {% block content %}
+    {% endblock %}
+
+    </main>
+    <hr>
+    <footer>
+      <a href="http://www-01.ibm.com/software/data/now-factory/">IBM Now Factory</a>
+    </footer>
+  </div>
+</body>
+</html>

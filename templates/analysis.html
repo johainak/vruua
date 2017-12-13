@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+
+  <script language="JavaScript">
+    location.href='/login';
+  </script>
+{%endif%}
+  <h2>Analysis data</h2>
+  <form method="POST">{% csrf_token %}
+    <div class="row">
+    <div class="col-md-2">
+      <!--<select name="imsi_id">-->
+        <!--<option value=" "> </option>-->
+        <!--{% for TDR in allTDRs%}-->
+        <!--<option value="{{TDR.imsi}}">{{ TDR.imsi }}</option>-->
+        <!--{% endfor %}-->
+      <!--</select>-->
+      {{ form.imsi.label_tag }}
+      <br>
+      {{ form.imsi }}
+    </div>
+    <div class="col-md-10">
+        <!--<option value=" "> </option>-->
+        <!--{% for TDR in allTDRs %}-->
+        <!--<option value="{{TDR.userAgent}}">{{ TDR.userAgent }}</option>-->
+        <!--{% endfor %}-->
+        {{ form.userAgent.label_tag }}
+        <br>
+        {{ form.userAgent }}
+    </div>
+      <br>
+    <div class="col-md-12">
+      <br>
+      <div class="col-sm-4"><button id="process" type="button" class="btn btn-primary" >Process</button></div>
+    </div>
+
+      <div class="col-md-12" >
+       <div><span id="elementVersion"></span></div>
+        <div class=bg-primary><span id="description"></span></div>
+       <div><span id="cvewidget"></span></div>
+     </div>
+
+
+
+  </div>
+  </form>
+<script language="JavaScript">
+  $(document).ready(function() {
+    $("#id_imsi").on("change", getuserAgent);
+    $("#process").on("click",getVulnerabilities);
+
+  });
+  function getuserAgent() {
+            var Id = $("#id_imsi").val();
+            if (Id) {
+                $("#userAgent").html("");
+                var request = $.ajax({
+                    type: "GET",
+                    url: "{% url 'get_userAgent' %}",
+                    data: {
+                        "imsi": Id,
+                    },
+                });
+                request.done(function(response) {
+
+                    $("#id_userAgent").html(response.userAgents);
+
+                    $("#id_useragent").trigger("change");
+                });
+            } else {
+                $("#id_useragent").html("<option value='' selected='selected'>---------</option>");
+
+                $("#id_useragent").trigger("change");
+            }
+        }
+  function getVulnerabilities() {
+                var Id = $("#id_userAgent").val();
+            if (Id) {
+                $("#cvewidget").html("");
+                var request = $.ajax({
+                    type: "GET",
+                    url: "{% url 'get_vulnerabilities' %}",
+                    data: {
+                        "userAgent": Id,
+                    },
+                });
+                request.done(function(response) {
+                    $("#elementVersion").html("<hr>" + response.element);
+                    $("#description").html("<br>" + response.vulDescription);
+                    $("#cvewidget").html(response.widget);
+
+                });
+            } /*else {
+                $("#id_useragent").html("<option value='' selected='selected'>---------</option>");
+
+                $("#id_useragent").trigger("change");
+            }
+    var x = document.getElementById("");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }*/
+  }
+</script>
+
+
+
+
+{% endblock %}

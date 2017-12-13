@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}index{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+
+  <script language="JavaScript">
+    location.href='/login';
+  </script>
+{%endif%}
+  <h2>Insert the TDR file</h2>
+<!--<form action="{%url 'analysis'%}" method="get">-->
+<form method="post" enctype="multipart/form-data" actio/>
+{% csrf_token %}
+  <div class="form-group">
+    <input id="input-file" name="input-file" type="file" class="file">
+    <button type="submit" class="btn btn-primary"  name="mybtn">Upload TDR</button>
+  </div>
+{% if uploaded_file_url %}
+    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+  {% endif %}
+</form>
+{% endblock %}
