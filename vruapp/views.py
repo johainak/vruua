@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
 from .models import TDR
-from forms import AnalysisForm
+from .forms import AnalysisForm
 
 def handle_uploaded_file(file):
     cwd = os.getcwd()
